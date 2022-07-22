@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { APP_BASE_HREF, CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { RegisterComponent } from './components/register/register.component';
@@ -37,7 +37,10 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
       closeButton : true
     })
   ],
-  providers: [],
+  providers: [
+    {provide:'apiUrl', useValue:'http://localhost:5262/api/'}
+    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
