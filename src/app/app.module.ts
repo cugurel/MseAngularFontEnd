@@ -11,13 +11,19 @@ import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { RegisterComponent } from './components/register/register.component';
+import { NavComponent } from './components/nav/nav.component';
+import { StatisticComponent } from './components/statistic/statistic.component';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    NavComponent,
+    StatisticComponent,
+    SidenavComponent
   ],
   imports: [
     BrowserModule,
