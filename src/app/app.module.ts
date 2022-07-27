@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {HttpClientModule} from '@angular/common/http'
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +14,9 @@ import { RegisterComponent } from './components/register/register.component';
 import { NavComponent } from './components/nav/nav.component';
 import { StatisticComponent } from './components/statistic/statistic.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { CustomerComponent } from './components/customer/customer.component';
+import { CompanyComponent } from './components/company/company.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,9 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
     RegisterComponent,
     NavComponent,
     StatisticComponent,
-    SidenavComponent
+    SidenavComponent,
+    CustomerComponent,
+    CompanyComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +43,8 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
     })
   ],
   providers: [
-    {provide:'apiUrl', useValue:'http://localhost:5262/api/'}
+    {provide:'apiUrl', useValue:'http://localhost:5262/api/'},
+    {provide : HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true}
     
   ],
   bootstrap: [AppComponent]

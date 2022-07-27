@@ -1,0 +1,87 @@
+<body class="g-sidenav-show  bg-gray-200">
+    <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
+      <app-sidenav></app-sidenav>
+    </aside>
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+      <app-nav></app-nav>
+      <div class="container-fluid py-4">
+        <app-statistic></app-statistic>
+        <div class="row mt-4">
+            <div class="col-12">
+              <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                  <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                    <h6 class="text-white text-capitalize ps-3">Şirket Listesi</h6>
+                    <button type="button" class="btn btn-info mx-3">
+                      <i class="material-icons opacity-10">person_add</i>
+                      Şirket Ekle
+                    </button>
+                    <button type="button" class="btn btn-secondary mx-3">
+                      <i class="material-icons opacity-10">attach_file</i>
+                      Excelden Şirket Ekle
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body px-0 pb-2">
+                  <div class="table-responsive p-0">
+                    <table class="table align-items-center mb-0">
+                      <thead>
+                        <tr>
+                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Yeni Müşteri</th>
+                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Ad</th>
+                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Adres</th>
+                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gsm</th>
+                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tel</th>
+                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aktif - Pasif</th>
+                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Düzenle</th>
+                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sil</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let company of companies">
+                          <td class="align-middle text-center text-sm">
+                            <a class="btn bg-gradient-info btn-sm mt-2">+</a>
+                          </td>
+                          <td>
+                            <div class="d-flex px-2 py-1">
+                              
+                              <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">{{company.name}}</h6>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <p class="text-xs font-weight-bold mb-0">{{company.address}}</p>
+                          </td>
+                          <td class="align-middle text-center text-sm">
+                            <span class="text-secondary text-xs font-weight-bold">{{company.gsm}}</span>
+                          </td>
+                          <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{company.localPhone}}</span>
+                          </td>
+                          <td class="align-middle text-center text-sm">
+                            <span class="badge badge-sm bg-gradient-warning">{{company.isActive ? "Aktif" : "Pasif"}}</span>
+                          </td>
+                          <td class="align-middle text-center text-sm">
+                            <a class="btn bg-gradient-success btn-sm mt-2">Düzenle</a>
+                          </td>
+                          <td class="align-middle text-center text-sm">
+                            <span class="btn bg-gradient-danger btn-sm mt-2">Sil</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <footer class="footer py-4  ">
+          
+        </footer>
+      </div>
+    </main>
+    
+    
+  </body>
+  
