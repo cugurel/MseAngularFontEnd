@@ -1,5 +1,5 @@
 export interface Company{
-    Id:number;
+    id:number;
     name:string;
     address:string;
     gsm:string;

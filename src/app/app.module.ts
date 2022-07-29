@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { APP_BASE_HREF, CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -17,6 +17,9 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { CustomerComponent } from './components/customer/customer.component';
 import { CompanyComponent } from './components/company/company.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { CompanyPipe } from './pipe/company.pipe';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { CompanyFilterPipe } from './pipe/company-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,9 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     StatisticComponent,
     SidenavComponent,
     CustomerComponent,
-    CompanyComponent
+    CompanyComponent,
+    CompanyPipe,
+    CompanyFilterPipe
   ],
   imports: [
     BrowserModule,
@@ -40,7 +45,9 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
       timeOut : 3000,
       progressBar:true,
       closeButton : true
-    })
+    }),
+    FormsModule,
+    SweetAlert2Module.forRoot()
   ],
   providers: [
     {provide:'apiUrl', useValue:'http://localhost:5262/api/'},

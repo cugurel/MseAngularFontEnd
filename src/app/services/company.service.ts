@@ -3,6 +3,8 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Company } from '../models/company';
 import { listResponseModel } from '../models/listResponseModel';
+import { ResponseModel } from '../models/responseModel';
+import { singleResponseModel } from '../models/singleResponseModel';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,25 @@ export class CompanyService {
     return this.httpClient.get<listResponseModel<Company>>(api)
   }
 
+  deleteCompany(company:Company):Observable<ResponseModel>{
+    let api = this.apiUrl + "company/deletecompany";
+    return this.httpClient.post<ResponseModel>(api,company);
+  }
+
+  getCompany(id:number):Observable<singleResponseModel<Company>>{
+    let api = this.apiUrl + "company/getcompanybyid?id="+id;
+    return this.httpClient.get<singleResponseModel<Company>>(api);
+  }
+
+  updateCompany(company:Company):Observable<ResponseModel>{
+    let api = this.apiUrl + "company/updatecompany";
+    return this.httpClient.post<ResponseModel>(api,company);
+  }
+
+  addCompany(company:Company):Observable<ResponseModel>{
+    let api = this.apiUrl + "company/addcompany";
+    return this.httpClient.post<ResponseModel>(api,company);
+  }
   
 }
 
