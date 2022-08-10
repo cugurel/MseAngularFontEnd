@@ -14,12 +14,15 @@ import { RegisterComponent } from './components/register/register.component';
 import { NavComponent } from './components/nav/nav.component';
 import { StatisticComponent } from './components/statistic/statistic.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
-import { CustomerComponent } from './components/customer/customer.component';
 import { CompanyComponent } from './components/company/company.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { CompanyPipe } from './pipe/company.pipe';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { CompanyFilterPipe } from './pipe/company-filter.pipe';
+import { PersonComponent } from './components/person/person.component';
+import { PersonPipe } from './pipe/person.pipe';
+import { PersonFilterPipe } from './pipe/person-filter.pipe';
+import { LocalChargeComponent } from './components/local-charge/local-charge.component';
 
 @NgModule({
   declarations: [
@@ -30,10 +33,13 @@ import { CompanyFilterPipe } from './pipe/company-filter.pipe';
     NavComponent,
     StatisticComponent,
     SidenavComponent,
-    CustomerComponent,
     CompanyComponent,
     CompanyPipe,
-    CompanyFilterPipe
+    CompanyFilterPipe,
+    PersonComponent,
+    PersonPipe,
+    PersonFilterPipe,
+    LocalChargeComponent,
   ],
   imports: [
     BrowserModule,

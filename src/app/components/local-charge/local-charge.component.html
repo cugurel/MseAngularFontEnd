@@ -1,0 +1,148 @@
+<aside
+  class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-dark"
+  id="sidenav-main"
+>
+  <app-sidenav></app-sidenav>
+</aside>
+<main
+  class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"
+>
+  <app-nav></app-nav>
+  <div class="container-fluid py-4">
+    <app-statistic></app-statistic>
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card my-4">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div
+              class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
+            >
+              <h6 class="text-white text-capitalize ps-3">{{title}}</h6>
+              <button *ngIf="operationAdd" type="button" class="btn btn-info mx-3">
+                <i class="material-icons opacity-10">person_add</i>
+                Yerel Hizmet Ekle
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div *ngIf="operationList">
+              <div class="form-group">
+            </div>
+              <div class="table-responsive">
+                <table id="excel-table" class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th
+                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      >
+                        Yeni Hizmet
+                      </th>
+                      <th
+                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      >
+                        Ad
+                      </th>
+                      
+                      <th
+                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      >
+                        Düzenle
+                      </th>
+                      <th
+                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                      >
+                        Sil
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let localCharge of localCharges">
+                      <td class="align-middle text-center text-sm">
+                        <button *ngIf="operationAdd" type="button" class="btn bg-gradient-info btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#addModal">
+                          <i class="material-icons opacity-10">+</i>
+                        </button>
+                      </td>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">{{ localCharge.name }}</h6>
+                          </div>
+                        </div>
+                      </td>
+                      
+                      <td class="align-middle text-center text-sm">
+                        <button *ngIf="operationUpdate" type="button" class="btn btn-warning btn-sm mx-2"   data-bs-toggle="modal" data-bs-target="#updateModal" (click)="getLocalCharge(localCharge.id)" >
+                          <i class="material-icons opacity-10">edit</i>
+                        </button>
+                      </td>
+                      
+                      <td class="align-middle text-center text-sm">
+                        <buttono *ngIf="operationDelete" type="button" [swal]="deleteSwal" (confirm)="deleteLocalCharge(localCharge)" class="btn btn-danger btn-sm mx-2">
+                          <i class="material-icons opacity-10">restore_from_trash</i>
+                        </buttono>
+                      </td>
+                      
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="footer py-4"></footer>
+  </div>
+</main>
+
+<swal #deleteSwal title="Sil?" text="Hizmeti silmek istediğinizden emin misiniz?" type="question" [showCancelButton]="true" [focusCancel]="true" [swalOptions]="{
+  confirmButtonText : 'Sil'}"></swal>
+
+  <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-weight-normal" id="exampleModalLabel">Yerel Hizmet Ekle</h5>
+          <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="addForm">
+            <div class="input-group input-group-outline mb-3">
+              <input type="text" formControlName="name" class="form-control" [ngModel]="name"  placeholder="Ad">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn bg-gradient-secondary" id="closeModal" data-bs-dismiss="modal">Kapat</button>
+          <button type="button" class="btn bg-gradient-primary" (click)="addLocalCharge()">Yerel Hizmet Ekle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-weight-normal" id="exampleModalLabel">Yerel Hizmeti Güncelle</h5>
+          <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="updateForm">
+            <div class="input-group input-group-outline mb-3">
+              <input type="text" formControlName="name" class="form-control" [ngModel]="name"  placeholder="Ad">
+            </div>
+            
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn bg-gradient-secondary" id="closeUpdateModal" data-bs-dismiss="modal">Kapat</button>
+          <button type="button" class="btn bg-gradient-primary" (click)="updateLocalCharge()">Yerel Hizmeti Güncelle</button>
+        </div>
+      </div>
+    </div>
+  </div>

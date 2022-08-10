@@ -2,30 +2,32 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ToastrService } from 'ngx-toastr';
-import { Company } from 'src/app/models/company';
+import { Person } from 'src/app/models/person';
 import { UserOperationClaim } from 'src/app/models/userOperationClaimModel';
 import { AuthService } from 'src/app/services/auth.service';
-import { CompanyService } from 'src/app/services/company.service';
+import { PersonService } from 'src/app/services/person.service';
 import { UserOperationClaimService } from 'src/app/services/user-operation-claim.service';
 import * as XLSX from 'xlsx';
 
+
 @Component({
-  selector: 'app-company',
-  templateUrl: './company.component.html',
-  styleUrls: ['./company.component.scss']
+  selector: 'app-person',
+  templateUrl: './person.component.html',
+  styleUrls: ['./person.component.scss']
 })
-export class CompanyComponent implements OnInit {
+export class PersonComponent implements OnInit {
+
   jwtHelper: JwtHelperService = new JwtHelperService();
 
 
   addForm:FormGroup;
   updateForm:FormGroup;
 
-  companies: Company[] = [];
+  people: Person[] = [];
   userOperationClaims : UserOperationClaim[] = [];
   isAuthenticated: boolean = false;
   searchString :string;
-  company:Company;
+  person:Person;
 
   allList:boolean = true;
   activeList:boolean = false;
@@ -35,12 +37,14 @@ export class CompanyComponent implements OnInit {
   activeListCheck:string = "";
   passiveListCheck:string = "";
 
-  title:string = "Aktif Şirket Listesi";
+  title:string = "Aktif Şahıs Listesi";
   filterText:string="";
 
   name:string;
   address:string;
   gsm:string;
+  surname:string;
+  gender:string;
   localPhone:string;
   isActive : boolean = true;
   userId:string;
@@ -54,11 +58,11 @@ export class CompanyComponent implements OnInit {
 
   constructor(
     private toastr: ToastrService,
-    private companyService: CompanyService,
+    private personService: PersonService,
     private authService: AuthService,
     private formBuilder:FormBuilder,
     private userOperationClaimService : UserOperationClaimService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.refresh();
@@ -67,7 +71,29 @@ export class CompanyComponent implements OnInit {
     this.createAddForm();
     this.createUpdateForm();
     this.userOperationClaimGetList();
-    
+  }
+
+  createUpdateForm(){
+    this.updateForm = this.formBuilder.group({
+      id:[0],
+      name:[this.name,Validators.required],
+      surname:[this.name,Validators.required],
+      gender:[this.name,Validators.required],
+      address:[""],
+      gsm:[""],
+      isActive: true
+    })
+  }
+  
+  createAddForm(){
+    this.addForm = this.formBuilder.group({
+      name:[this.name,Validators.required],
+      surname:[""],
+      address:[""],
+      gsm:[""],
+      gender:[""],
+      isActive: true
+    })
   }
 
   refresh() {
@@ -78,6 +104,14 @@ export class CompanyComponent implements OnInit {
       let userId = Object.keys(decode).filter((x) => x.endsWith('/nameidentifier'))[0];
       this.userId = decode[userId];
     }
+  }
+  exportExcel(){
+    let element = document.getElementById('excel-table');
+    const ws:XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws, 'sheet1');
+
+    XLSX.writeFile(wb,"Müşteri Listesi.xlsx");
   }
 
   userOperationClaimGetList(){
@@ -115,45 +149,38 @@ export class CompanyComponent implements OnInit {
     })
   }
 
-  getList(){
-    this.companyService.getList().subscribe((res)=>{
-      this.companies = res.data;
-      console.log(this.companies);
-    })
+
+  getListByCheck(text:string){
+
+    if(text == "allList"){
+      this.filterText="";
+      this.title = "Tüm Şahıslar";
+      this.activeList=false;
+      this.passiveList = false;
+      this.allListCheck = "checked";
+      this.activeListCheck = "";
+      this.passiveListCheck = "";
+    }else if(text == "activeList"){
+      this.filterText = "true";
+      this.title = "Tüm Aktif Şahıslar";
+      this.allList=false;
+      this.passiveList=false
+      this.allListCheck = "";
+      this.activeListCheck = "checked";
+      this.passiveListCheck = "";
+    }else if(text == "passiveList"){
+      this.filterText = "false";
+      this.title="Tüm Pasif Şahıslar";
+      this.allList = false;
+      this.activeList = false;
+      this.allListCheck = "";
+      this.activeListCheck = "";
+      this.passiveListCheck = "checked";
+    }
   }
 
-  exportExcel(){
-    let element = document.getElementById('excel-table');
-    const ws:XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb,ws, 'sheet1');
-
-    XLSX.writeFile(wb,"Müşteri Listesi.xlsx");
-  }
-
-  createAddForm(){
-    this.addForm = this.formBuilder.group({
-      name:[this.name,Validators.required],
-      address:[""],
-      gsm:[""],
-      localPhone:[""],
-      isActive: true
-    })
-  }
-
-  createUpdateForm(){
-    this.updateForm = this.formBuilder.group({
-      id:[0],
-      name:[this.name,Validators.required],
-      address:[""],
-      gsm:[""],
-      localPhone:[""],
-      isActive: true
-    })
-  }
-
-  deleteCompany(company: Company){
-    this.companyService.deleteCompany(company).subscribe((res)=>{
+  deletePerson(person: Person){
+    this.personService.deletePerson(person).subscribe((res)=>{
       this.toastr.success(res.message);
       this.getList();
     },(err)=>{
@@ -161,9 +188,9 @@ export class CompanyComponent implements OnInit {
     })
   }
 
-  changeStatusCompany(company: Company){
-    company.isActive ? company.isActive = false : company.isActive = true; 
-    this.companyService.updateCompany(company).subscribe((res)=>{
+  changeStatusPerson(person: Person){
+    person.isActive ? person.isActive = false : person.isActive = true; 
+    this.personService.updatePerson(person).subscribe((res)=>{
       this.toastr.warning(res.message);
       this.getList();
     },(err)=>{
@@ -171,10 +198,16 @@ export class CompanyComponent implements OnInit {
     })
   }
 
-  addCompany(){
+  getList(){
+    this.personService.getList().subscribe((res)=>{
+      this.people = res.data;
+    })
+  }
+
+  addPerson(){
     if(this.addForm.valid){
-      let companyModel = Object.assign({}, this.addForm.value);
-      this.companyService.addCompany(companyModel).subscribe((res)=>{
+      let personModel = Object.assign({}, this.addForm.value);
+      this.personService.addPerson(personModel).subscribe((res)=>{
         this.toastr.success(res.message);
         this.getList();
         this.createAddForm();
@@ -187,10 +220,10 @@ export class CompanyComponent implements OnInit {
     }
   }
 
-  updateCompany(){
+  updatePerson(){
     if(this.updateForm.valid){
-      let companyModel = Object.assign({}, this.updateForm.value);
-      this.companyService.updateCompany(companyModel).subscribe((res)=>{
+      let personModel = Object.assign({}, this.updateForm.value);
+      this.personService.updatePerson(personModel).subscribe((res)=>{
         this.toastr.success(res.message);
         this.getList();
         this.createAddForm();
@@ -203,51 +236,21 @@ export class CompanyComponent implements OnInit {
     }
   }
 
-  currentCompany(company: Company){
-    this.company = company;
-    //console.log(this.company);
-  }
-
-  getListByCheck(text:string){
-
-    if(text == "allList"){
-      this.filterText=""
-      this.title = "Tüm Şirketler";
-      this.activeList=false;
-      this.passiveList = false;
-      this.allListCheck = "checked";
-      this.activeListCheck = "";
-      this.passiveListCheck = "";
-    }else if(text == "activeList"){
-      this.filterText = "true";
-      this.title = "Tüm Aktif Şirketler";
-      this.allList=false;
-      this.passiveList=false
-      this.allListCheck = "";
-      this.activeListCheck = "checked";
-      this.passiveListCheck = "";
-    }else if(text == "passiveList"){
-      this.filterText = "false";
-      this.title="Tüm Pasif Şirketler";
-      this.allList = false;
-      this.activeList = false;
-      this.allListCheck = "";
-      this.activeListCheck = "";
-      this.passiveListCheck = "checked";
-    }
-  }
-
-  getCompany(id:number){
-    this.companyService.getCompany(id).subscribe((res)=>{
-      this.company = res.data;
+  getPerson(id:number){
+    this.personService.getPerson(id).subscribe((res)=>{
+      this.person = res.data;
       this.updateForm.controls["id"].setValue(res.data.id);
       this.updateForm.controls["name"].setValue(res.data.name);
+      this.updateForm.controls["surname"].setValue(res.data.surname);
       this.updateForm.controls["address"].setValue(res.data.address);
+      this.updateForm.controls["gender"].setValue(res.data.gender);
       this.updateForm.controls["gsm"].setValue(res.data.gsm);
-      this.updateForm.controls["localPhone"].setValue(res.data.localPhone);
-      console.log(this.company);
     },(err)=>{
       this.toastr.error("Bir hata oluştu")
     })
+  }
+
+  currentCompany(person: Person){
+    this.person = person;
   }
 }

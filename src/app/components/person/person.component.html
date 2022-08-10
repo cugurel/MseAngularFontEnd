@@ -20,11 +20,11 @@
               <h6 class="text-white text-capitalize ps-3">{{title}}</h6>
               <button *ngIf="operationAdd" type="button" class="btn btn-info mx-3">
                 <i class="material-icons opacity-10">person_add</i>
-                Şirket Ekle
+                Şahıs Ekle
               </button>
               <button *ngIf="operationAdd" type="button" class="btn btn-secondary mx-3">
                 <i class="material-icons opacity-10">attach_file</i>
-                Excelden Şirket Ekle
+                Excelden Şahıs Ekle
               </button>
               
             </div>
@@ -33,7 +33,7 @@
             <div *ngIf="operationList">
               <div class="form-group">
                 <div class="row">
-                  <div class="col-md-5">
+                  <div class="col-md-4">
                     <button
                   type="button"
                   class="btn btn-secondary mx-3"
@@ -51,7 +51,7 @@
                 </div>
                 <div class="col-md-1">
                   <div class="form-check form-switch d-flex align-items-center mb-3">
-                    <input class="form-check-input" type="checkbox" id="activeList" [(ngModel)]="activeList" (change)="getListByCheck('activeList')" checked>
+                    <input class="form-check-input" type="checkbox" id="activeList" [(ngModel)]="activeList" (change)="getListByCheck('activeList')">
                     <label class="form-check-label mb-0 ms-2" for="rememberMe">Aktif</label>
                   </div>
                 </div>
@@ -61,12 +61,13 @@
                     <label class="form-check-label mb-0 ms-2" for="rememberMe">Pasif</label>
                   </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                   <div
                     class="input-group input-group-outline my-3"
-                    style="width: 40%; margin-left: 50%">
-                    <label class="form-label">Şirket Ara</label>
+                    style="width: 40%; margin-left: 55%">
+                    
                     <input
+                    placeholder="Şahıs Ara"
                       type="text"
                       autocomplete="off"
                       [(ngModel)]="searchString"
@@ -82,7 +83,7 @@
                       <th
                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                       >
-                        Yeni Müşteri
+                        Yeni Şahıs
                       </th>
                       <th
                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
@@ -91,6 +92,11 @@
                       </th>
                       <th
                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                      >
+                        Soyad
+                      </th>
+                      <th
+                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                       >
                         Adres
                       </th>
@@ -102,7 +108,7 @@
                       <th
                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                       >
-                        Tel
+                        Cinsiyet
                       </th>
                       <th
                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
@@ -127,7 +133,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let company of companies | companyPipe: searchString | companyFilter : filterText">
+                    <tr *ngFor="let person of people | personPipe: searchString | personFilter : filterText">
                       <td class="align-middle text-center text-sm">
                         <button *ngIf="operationAdd" type="button" class="btn bg-gradient-info btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#addModal">
                           <i class="material-icons opacity-10">+</i>
@@ -136,46 +142,52 @@
                       <td>
                         <div class="d-flex px-2 py-1">
                           <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">{{ company.name }}</h6>
+                            <h6 class="mb-0 text-sm">{{ person.name }}</h6>
                           </div>
                         </div>
                       </td>
                       <td>
                         <p class="text-xs font-weight-bold mb-0">
-                          {{ company.address }}
+                          {{ person.surname }}
                         </p>
                       </td>
                       <td class="align-middle text-center text-sm">
                         <span class="text-secondary text-xs font-weight-bold">{{
-                          company.gsm
+                          person.address
                         }}</span>
                       </td>
-                      <td class="align-middle text-center">
+
+                      <td class="align-middle text-center text-sm">
                         <span class="text-secondary text-xs font-weight-bold">{{
-                          company.localPhone
+                          person.gsm
+                        }}</span>
+                      </td>
+                      
+                      <td class="align-middle text-center text-sm">
+                        <span class="text-secondary text-xs font-weight-bold">{{
+                          person.gender
                         }}</span>
                       </td>
                       <td class="align-middle text-center text-sm">
                         <span class="badge badge-sm bg-gradient-warning">{{
-                          company.isActive ? "Aktif" : "Pasif"
+                          person.isActive ? "Aktif" : "Pasif"
                         }}</span>
                       </td>
                       <td class="align-middle text-center text-sm">
-                        <button *ngIf="operationUpdate" type="button" class="btn btn-warning btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#updateModal" (click)="getCompany(company.id)">
+                        <button *ngIf="operationUpdate" type="button" class="btn btn-warning btn-sm mx-2" data-bs-toggle="modal" data-bs-target="#updateModal" (click)="getPerson(person.id)">
                           <i class="material-icons opacity-10">edit</i>
                         </button>
                       </td>
                       <td class="align-middle text-center text-sm">
-                        <button *ngIf="operationUpdate" type="button" [swal]="changeStatusSwal" (confirm)="changeStatusCompany(company)" class="btn btn-primary btn-sm mx-2" (click)="currentCompany(company)">
+                        <button *ngIf="operationUpdate" type="button" [swal]="changeStatusSwal" (confirm)="changeStatusPerson(person)" class="btn btn-primary btn-sm mx-2">
                           <i class="material-icons opacity-10">check_box</i>
                         </button>
                       </td>
                       <td class="align-middle text-center text-sm">
-                        <buttono *ngIf="operationDelete" type="button" [swal]="deleteSwal" (confirm)="deleteCompany(company)" class="btn btn-danger btn-sm mx-2" (click)="currentCompany(company)">
+                        <buttono *ngIf="operationDelete" type="button" [swal]="deleteSwal" (confirm)="deletePerson(person)" class="btn btn-danger btn-sm mx-2" >
                           <i class="material-icons opacity-10">restore_from_trash</i>
                         </buttono>
                       </td>
-                      
                     </tr>
                   </tbody>
                 </table>
@@ -189,10 +201,10 @@
   </div>
 </main>
 
-<swal #deleteSwal title="Sil?" text="Şirketi silmek istediğinizden emin misiniz?" type="question" [showCancelButton]="true" [focusCancel]="true" [swalOptions]="{
+<swal #deleteSwal title="Sil?" text="Şahısı silmek istediğinizden emin misiniz?" type="question" [showCancelButton]="true" [focusCancel]="true" [swalOptions]="{
   confirmButtonText : 'Sil'}"></swal>
 
-<swal #changeStatusSwal title="Durum Değiştir?" text="Şirketin Aktif-Pasif durumunu değiştirmek istiyor musunuz?" type="question" [showCancelButton]="true" [focusCancel]="true" [swalOptions]="{
+<swal #changeStatusSwal title="Durum Değiştir?" text="Şahısın Aktif-Pasif durumunu değiştirmek istiyor musunuz?" type="question" [showCancelButton]="true" [focusCancel]="true" [swalOptions]="{
   confirmButtonText : 'Değiştir'}"></swal>
 
 
@@ -200,7 +212,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title font-weight-normal" id="exampleModalLabel">Şirket Ekle</h5>
+          <h5 class="modal-title font-weight-normal" id="exampleModalLabel">Şahıs Ekle</h5>
           <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -211,20 +223,23 @@
               <input type="text" formControlName="name" class="form-control" [ngModel]="name"  placeholder="Ad">
             </div>
             <div class="input-group input-group-outline mb-3">
+              <input type="text" formControlName="surname" class="form-control" [ngModel]="surname"  placeholder="Soyad">
+            </div>
+            <div class="input-group input-group-outline mb-3">
               <input type="text" formControlName="address" class="form-control" [ngModel]="address"  placeholder="Adres">
             </div>
             <div class="input-group input-group-outline mb-3">
-              <input type="text" formControlName="gsm" class="form-control" [ngModel]="gsm" placeholder="Gsm">
+              <input type="text" formControlName="gsm" class="form-control" [ngModel]="gsm"  placeholder="Gsm">
             </div>
             <div class="input-group input-group-outline mb-3">
-              <input type="text" formControlName="localPhone" class="form-control" [ngModel]="localPhone"   placeholder="Telefon">
+              <input type="text" formControlName="gender" class="form-control" [ngModel]="gender" placeholder="Cinsiyet">
             </div>
-            
+           
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn bg-gradient-secondary" id="closeModal" data-bs-dismiss="modal">Kapat</button>
-          <button type="button" class="btn bg-gradient-primary" (click)="addCompany()">Şirket Ekle</button>
+          <button type="button" class="btn bg-gradient-primary" (click)="addPerson()">Şahıs Ekle</button>
         </div>
       </div>
     </div>
@@ -245,20 +260,24 @@
               <input type="text" formControlName="name" class="form-control" [ngModel]="name"  placeholder="Ad">
             </div>
             <div class="input-group input-group-outline mb-3">
+              <input type="text" formControlName="surname" class="form-control" [ngModel]="surname"  placeholder="Soyad">
+            </div>
+            <div class="input-group input-group-outline mb-3">
               <input type="text" formControlName="address" class="form-control" [ngModel]="address"  placeholder="Adres">
             </div>
             <div class="input-group input-group-outline mb-3">
-              <input type="text" formControlName="gsm" class="form-control" [ngModel]="gsm" placeholder="Gsm">
+              <input type="text" formControlName="gsm" class="form-control" [ngModel]="gsm"  placeholder="Gsm">
             </div>
             <div class="input-group input-group-outline mb-3">
-              <input type="text" formControlName="localPhone" class="form-control" [ngModel]="localPhone"   placeholder="Telefon">
+              <input type="text" formControlName="gender" class="form-control" [ngModel]="gender" placeholder="Cinsiyet">
             </div>
+           
             
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn bg-gradient-secondary" id="closeUpdateModal" data-bs-dismiss="modal">Kapat</button>
-          <button type="button" class="btn bg-gradient-primary" (click)="updateCompany()">Şirketi Güncelle</button>
+          <button type="button" class="btn bg-gradient-primary" (click)="updatePerson()">Şahısı Güncelle</button>
         </div>
       </div>
     </div>
